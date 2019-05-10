@@ -13,6 +13,7 @@ mod commands;
 mod constants;
 mod errors;
 mod http_server;
+mod ipc;
 
 fn main() {
     env_logger::init();
@@ -36,6 +37,11 @@ fn main() {
     let mut file_server = http_server::HttpServer::new(constants::HTTP_HOST.to_string(), constants::HTTP_PORT.to_string(), static_file_root.to_string());
     thread::spawn(move || {
         file_server.run()
+    });
+
+    let mut ipc_server = ipc::server::IPCServer::new(constants::IPC_HOST.to_string(), constants::IPC_PORT.to_string());
+    thread::spawn(move || {
+        ipc_server.run()
     });
 
     thread::spawn(move || {

@@ -2,7 +2,7 @@ use std::default::Default;
 
 use crate::components::input::text_input_modal::TextInputModal;
 use crate::core::model::MainWindow;
-
+use crate::core::model::Msg as CoreMsg;
 use yew::prelude::*;
 use yew::services::ConsoleService;
 
@@ -10,13 +10,14 @@ pub enum Msg {
     Exit,
     ShowNewPrefab,
     ShowNewProject,
+    ShowRendergraphEditor,
 }
 
 #[allow(dead_code)]
 pub struct NavBar {
     import_prefab_modal: TextInputModal,
     projects: Vec<String>,
-    onsignal: Option<Callback<MainWindow>>,
+    onsignal: Option<Callback<CoreMsg>>,
     console: ConsoleService,
     ws_connected: bool,
 }
@@ -25,7 +26,7 @@ pub struct NavBar {
 pub struct Props {
     pub import_prefab_modal: TextInputModal,
     pub projects: Vec<String>,
-    pub onsignal: Option<Callback<MainWindow>>,
+    pub onsignal: Option<Callback<CoreMsg>>,
     pub ws_connected: bool,
 }
 
@@ -71,6 +72,17 @@ impl Component for NavBar {
                 }
             },
             Msg::ShowNewProject => true,
+            Msg::ShowRendergraphEditor => {
+                match &self.onsignal {
+                    Some(signal) => {
+                        signal.emit(CoreMsg::ShowRenderGraph);
+                    },
+                    None => {
+                        self.console.log("No CB arranged");
+                    }
+                };
+                true
+            }
         };
         true
     }
@@ -117,17 +129,20 @@ impl Renderable<NavBar> for NavBar {
                                 </ul>
                             </div>
                         </li>
-                        <li><a href="#not-implemented", uk-toggle="", >{ "Help" }</a></li>
                         <li>
-                            <a href="#",>
-                                <span class="uk-icon uk-margin-small-right", uk-icon=if self.ws_connected {"icon: check"} else {"icon: close"},></span>
-                                {"Server Connection"}
-                            </a>
+                            <a href="#", onclick=|_| Msg::ShowRendergraphEditor, >{ "Rendergraph Editor" }</a>
                         </li>
-
+                    </ul>
+                </div>
+                <div class="uk-navbar-right", >
+                    <ul class="uk-navbar-nav", >
+                        <li>
+                            <a href="#not-implemented", uk-toggle="", >{ "Help" }</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
         }
     }
 }
+

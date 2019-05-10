@@ -12,6 +12,7 @@ use crate::components::prefab::scene::form::Form as SceneForm;
 use crate::components::prefab::ui::form::Form as UIForm;
 use crate::components::project::new_project_modal::NewProjectModal;
 use crate::components::project::open_project_modal::OpenProjectModal;
+use crate::components::rendergraph::rendergraph::RenderGraph;
 
 use crate::storage::Prefab;
 
@@ -20,6 +21,8 @@ use yew::prelude::*;
 use yew::services::storage::{Area, StorageService};
 use yew::services::websocket::{WebSocketService, WebSocketStatus, WebSocketTask};
 use yew::services::ConsoleService;
+
+use stdweb;
 
 /// Messages the model responds to
 pub enum Msg {
@@ -32,6 +35,7 @@ pub enum Msg {
     WsReady(Result<WsResponse, Error>),
     Ignore,
     WsConnected,
+    ShowRenderGraph,
 }
 
 pub enum WsAction {
@@ -63,7 +67,7 @@ impl From<WsAction> for Msg {
 pub enum MainWindow {
     None,
     PrefabEditor(String),
-    ProjectEditor,
+    ProjectEditor
 }
 
 /// Base model that keeps application state if needed
@@ -85,7 +89,7 @@ impl Model {
             Some(ref mw) => match mw {
                 MainWindow::None => self.empty_primary_window(),
                 MainWindow::PrefabEditor(window) => self.prefab_editor_window(window),
-                MainWindow::ProjectEditor => self.project_editor_window(),
+                MainWindow::ProjectEditor => self.project_editor_window()
             },
             None => self.empty_primary_window(),
         }
@@ -133,14 +137,14 @@ impl Model {
     fn empty_primary_window(&self) -> Html<Self> {
         html! {
             <div uk-grid="", class="uk-flex-center", >
-                <div class="uk-width-1-4", ></div>
-                <div class="uk-card uk-card-body uk-width-expand", >
-                    <h4> {"Hello!"} </h4>
-                    <p> {"Your workspace looks a bit lonely...did you know can create a new project or open an existing one by clicking on Projects in the upper left?"} </p>
-                    <p> {"If you'd like to just work on a prefab, click the Prefab menu along the top."} </p>
-                </div>
-                <div class="uk-width-1-4", ></div>
+
             </div>
+        }
+    }
+
+    fn rendergraph_editor_window(&self) {
+        js!{
+            setup_rendergraph();
         }
     }
 }
@@ -164,7 +168,7 @@ impl Component for Model {
             ws_connected: false,
         };
 
-        Model {
+        let mut m = Model {
             state,
             storage: StorageService::new(Area::Local),
             console: ConsoleService::new(),
@@ -173,12 +177,24 @@ impl Component for Model {
             link,
             ws_data: None,
             project_exists: false,
-        }
+        };
+
+        let callback = m.link.send_back(|Json(data)| Msg::WsReady(data));
+        let notification = m.link.send_back(|status| match status {
+                        WebSocketStatus::Opened => Msg::WsConnected,
+                        WebSocketStatus::Closed => Msg::Ignore,
+                        WebSocketStatus::Error => WsAction::Lost.into(),
+        });
+        m.ws_task = Some(m.ws.connect("ws://localhost:19001/", callback, notification));
+        m
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
             Msg::Quit => {}
+            Msg::ShowRenderGraph => {
+                self.rendergraph_editor_window();
+            }
             Msg::CreateNewPrefab => {
                 self.state.opened_prefab = Some(Prefab::new());
             }
@@ -204,7 +220,7 @@ impl Component for Model {
                     });
                     let task = self
                         .ws
-                        .connect("ws://localhost:9001/", callback, notification);
+                        .connect("ws://localhost:19001/", callback, notification);
 
                     self.ws_task = Some(task);
                 }
@@ -223,6 +239,7 @@ impl Component for Model {
             Msg::Ignore => {}
         }
         true
+
     }
 }
 
@@ -239,9 +256,10 @@ impl Renderable<Model> for Model {
                 <NewProjectModal: onsignal=|project_name| Msg::CreateNewProject(project_name), />
                 <section class="editor",>
                     <header class="header",>
-                        <NavBar: ws_connected={self.state.ws_connected}, />
+                        <NavBar: ws_connected={self.state.ws_connected}, onsignal=|window| {window}, />
                     </header>
                 <section class="main",>
+                    <RenderGraph: />
                     {self.choose_primary_window()}
                 </section>
                 <footer class="footer",>

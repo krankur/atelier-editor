@@ -1,10 +1,7 @@
 #![recursion_limit = "128"]
 
-extern crate yew;
-extern crate web_logger;
-extern crate editor;
-
 use yew::prelude::*;
+
 use editor::core::model::Model;
 
 fn main() {
