@@ -8,6 +8,7 @@ use crate::components::navigation::navbar::NavBar;
 use crate::components::navigation::not_implemented_modal::NotImplementedModal;
 use crate::components::navigation::project_browser::ProjectBrowser;
 use crate::components::navigation::editor_toolbar::EditorToolbar;
+use crate::components::navigation::resizable::Resizable;
 use crate::components::prefab::prefab_type_modal::PrefabNewModal;
 use crate::components::prefab::scene::form::Form as SceneForm;
 use crate::components::prefab::ui::form::Form as UIForm;
@@ -245,6 +246,8 @@ impl Renderable<Model> for Model {
                         <NavBar: ws_connected={self.state.ws_connected}, />
                     </header>
                 <section class="main",>
+                    <Resizable: />
+                    <div>{ "nested" }</div>
                     {self.choose_primary_window()}
                 </section>
                 <footer class="footer",>

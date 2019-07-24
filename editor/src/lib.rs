@@ -6,3 +6,6 @@ pub mod storage;
 
 #[macro_use]
 extern crate yew;
+
+#[macro_use]
+extern crate stdweb;
