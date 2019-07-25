@@ -32,7 +32,7 @@ impl Resizable {
     }
 }
 
-#[derive(Clone, PartialEq, Properties)]
+#[derive(Properties)]
 pub struct Props {
     innerTemplate: Option<Html<Self>>,
 }
