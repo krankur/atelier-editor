@@ -19,7 +19,7 @@ pub struct PrefabNewModal {
     onsignal: Option<Callback<String>>,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     /// Initially selected value.
     pub selected: Option<PrefabForms>,

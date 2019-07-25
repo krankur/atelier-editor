@@ -32,6 +32,11 @@ pub enum ComponentsForm {
     Removal,
 }
 
+impl Default for ComponentsForm {
+    fn default() -> ComponentsForm {
+        ComponentsForm::Light
+    }
+}
 
 pub struct Form {
     active_form: ComponentsForm,
@@ -51,7 +56,7 @@ impl Default for Form {
      }
  }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub active_form: ComponentsForm,
 }

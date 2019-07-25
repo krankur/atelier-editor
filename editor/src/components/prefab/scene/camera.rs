@@ -22,7 +22,7 @@ impl Camera {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub perspective: Option<Perspective>,
 }

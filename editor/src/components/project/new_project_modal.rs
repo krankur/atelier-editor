@@ -15,7 +15,7 @@ pub struct NewProjectModal {
     onsignal: Option<Callback<String>>,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub name: String,
     pub project_exists: bool,

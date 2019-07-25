@@ -12,7 +12,7 @@ impl Graphics {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {}
 
 impl Component for Graphics {

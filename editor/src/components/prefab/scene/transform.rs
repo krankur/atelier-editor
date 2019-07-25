@@ -24,7 +24,7 @@ impl Transform {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub translation: Option<Translation>,
     pub rotation: Option<Rotation>,

@@ -25,11 +25,11 @@ impl PrefabEditorRow {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub name: String,
     pub value: String,
-    pub on_add: Callback<()>,
+    pub on_add: Option<Callback<()>>,
 }
 
 impl Component for PrefabEditorRow {
@@ -39,7 +39,7 @@ impl Component for PrefabEditorRow {
         PrefabEditorRow {
             name: props.name,
             value: props.value,
-            on_add: props.on_add,
+            on_add: props.on_add.unwrap(),
         }
     }
 
@@ -54,7 +54,7 @@ impl Component for PrefabEditorRow {
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
         self.name = props.name;
         self.value = props.value;
-        self.on_add = props.on_add;
+        self.on_add = props.on_add.unwrap();
         true
     }
 }
@@ -77,7 +77,8 @@ impl Default for Props {
         Props {
             name: "Field Name".to_string(),
             value: "Field Value".to_string(),
-            on_add: Callback::from(|_| return),
+            // on_add: Callback::from(|_| return),
+            on_add: None,
         }
     }
 }

@@ -51,7 +51,7 @@ impl Light {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub ambient_color: Option<AmbientColor>,
     pub point_options: Option<PointOptions>,

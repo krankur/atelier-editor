@@ -21,7 +21,7 @@ pub struct NavBar {
     ws_connected: bool,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub import_prefab_modal: TextInputModal,
     pub projects: Vec<String>,
@@ -86,6 +86,7 @@ impl Component for NavBar {
 impl Renderable<NavBar> for NavBar {
     fn view(&self) -> Html<Self> {
         html! {
+            <>
             <div style=" display: block; white-space: nowrap; backgorund-color: #000; width: 40px; height: 100%; ",></div>
             <nav uk-navbar="", class="uk-navbar-container noselect", >
                 <div class="uk-navbar-left", >
@@ -129,6 +130,7 @@ impl Renderable<NavBar> for NavBar {
                     </ul>
                 </div>
             </nav>
+            </>
         }
     }
 }

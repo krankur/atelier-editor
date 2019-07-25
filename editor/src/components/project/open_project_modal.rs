@@ -12,10 +12,10 @@ pub struct OpenProjectModal {
     on_create: Callback<Msg>,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub name: String,
-    pub on_create: Callback<Msg>,
+    pub on_create: Option<Callback<Msg>>,
 }
 
 impl OpenProjectModal {
@@ -33,7 +33,7 @@ impl Component for OpenProjectModal {
     fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
         OpenProjectModal {
             name: props.name,
-            on_create: props.on_create,
+            on_create: props.on_create.unwrap(),
         }
     }
 
@@ -43,7 +43,7 @@ impl Component for OpenProjectModal {
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
         self.name = props.name;
-        self.on_create = props.on_create;
+        self.on_create = props.on_create.unwrap();
         true
     }
 }
@@ -73,7 +73,8 @@ impl Default for Props {
     fn default() -> Self {
         Props {
             name: "New Project".to_string(),
-            on_create: Callback::from(|_| return),
+            // on_create: Callback::from(|_| return),
+            on_create: None,
         }
     }
 }

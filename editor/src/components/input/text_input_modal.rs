@@ -19,16 +19,32 @@ pub struct TextInputModal {
     warning_hidden: bool,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub title: String,
     pub content: String,
     pub button_text: String,
     pub placeholder: String,
     pub id: String,
-    pub on_import: Callback<String>,
+    pub on_import: Option<Callback<String>>,
     pub warning_hidden: bool,
     pub onsignal: Option<Callback<String>>,
+}
+
+impl Default for Props {
+    fn default() -> Self {
+        Props {
+            title: "Default".to_string(),
+            content: "...".to_string(),
+            placeholder: "...".to_string(),
+            button_text: "Save".to_string(),
+            id: "#generic-modal".to_string(),
+            // on_import: Callback::from(|_| return),
+            on_import: None,
+            warning_hidden: true,
+            onsignal: None,
+        }
+    }
 }
 
 impl TextInputModal {
@@ -45,6 +61,20 @@ impl TextInputModal {
     }
 }
 
+impl Default for TextInputModal {
+    fn default() -> Self {
+        TextInputModal {
+            title: "Default".to_string(),
+            content: "...".to_string(),
+            placeholder: "...".to_string(),
+            button_text: "Save".to_string(),
+            id: "#generic-modal".to_string(),
+            on_import: Callback::from(|_| return),
+            warning_hidden: true,
+        }
+    }
+}
+
 impl Component for TextInputModal {
     type Message = TextInputModalMsg;
     type Properties = Props;
@@ -54,7 +84,7 @@ impl Component for TextInputModal {
             content: props.content,
             placeholder: props.placeholder,
             button_text: props.button_text,
-            on_import: props.on_import,
+            on_import: props.on_import.unwrap(),
             id: props.id,
             warning_hidden: true,
         }
@@ -74,7 +104,7 @@ impl Component for TextInputModal {
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.on_import = props.on_import;
+        self.on_import = props.on_import.unwrap();
         self.content = props.content;
         self.title = props.title;
         self.placeholder = props.placeholder;
@@ -100,21 +130,6 @@ impl Renderable<TextInputModal> for TextInputModal {
                 </div>
             </div>
           </div>
-        }
-    }
-}
-
-impl Default for Props {
-    fn default() -> Self {
-        Props {
-            title: "Default".to_string(),
-            content: "...".to_string(),
-            placeholder: "...".to_string(),
-            button_text: "Save".to_string(),
-            id: "#generic-modal".to_string(),
-            on_import: Callback::from(|_| return),
-            warning_hidden: true,
-            onsignal: None,
         }
     }
 }

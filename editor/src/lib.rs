@@ -1,4 +1,4 @@
-#![recursion_limit = "128"]
+#![recursion_limit = "512"]
 
 pub mod components;
 pub mod core;

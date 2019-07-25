@@ -30,20 +30,22 @@ pub struct PrefabEditorWindow {
 }
 
 /// Props for the Prefab Editor Window
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct PrefabEditorProps {
-    pub on_prefab_create: Callback<WindowMsg>,
+    pub on_prefab_create: Option<Callback<WindowMsg>>,
     pub rows: Vec<PrefabEditorRow>,
-    pub add_row_callback: Callback<()>,
+    pub add_row_callback: Option<Callback<()>>,
     pub selected_prefab: Option<PrefabForms>,
 }
 
 impl Default for PrefabEditorProps {
     fn default() -> Self {
         PrefabEditorProps {
-            on_prefab_create: Callback::from(|_| return),
+            // on_prefab_create: Callback::from(|_| return),
+            on_prefab_create: None,
             rows: vec![],
-            add_row_callback: Callback::from(|_| return),
+            // add_row_callback: Callback::from(|_| return),
+            add_row_callback: None,
             selected_prefab: None,
         }
     }
@@ -116,9 +118,9 @@ impl Component for PrefabEditorWindow {
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
         self.rows = props.rows;
-        self.add_row_callback = props.add_row_callback;
+        self.add_row_callback = props.add_row_callback.unwrap();
         self.selected_prefab = props.selected_prefab;
-        self.on_prefab_create = props.on_prefab_create;
+        self.on_prefab_create = props.on_prefab_create.unwrap();
         true
     }
 }

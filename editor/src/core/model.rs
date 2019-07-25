@@ -134,7 +134,8 @@ impl Model {
 
     fn empty_primary_window(&self) -> Html<Self> {
         html! {
-            <img draggable="false", class="engien-icon", src="img/amethyst_logo.svg",>
+            <>
+            <img draggable="false", class="engien-icon", src="img/amethyst_logo.svg", />
             <div uk-grid="", class="uk-flex-center", >
                 <div class="uk-width-1-4", ></div>
                 <div class="uk-card uk-card-body uk-width-expand", >
@@ -144,6 +145,7 @@ impl Model {
                 </div>
                 <div class="uk-width-1-4", ></div>
             </div>
+            </>
         }
     }
 }
@@ -246,7 +248,7 @@ impl Renderable<Model> for Model {
                         <NavBar: ws_connected={self.state.ws_connected}, />
                     </header>
                 <section class="main",>
-                    <Resizable: />
+                    // <Resizable: />
                     <div>{ "nested" }</div>
                     {self.choose_primary_window()}
                 </section>

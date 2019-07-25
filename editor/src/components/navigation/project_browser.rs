@@ -12,7 +12,7 @@ pub struct ProjectBrowser {
     projects: Vec<String>,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     pub projects: Vec<String>,
 }

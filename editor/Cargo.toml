@@ -5,7 +5,7 @@ authors = ["Fletcher Haynes <fletcher@amethyst-engine.org>"]
 edition = "2018"
 
 [dependencies]
-yew = "0.6"
+yew = { git = "https://github.com/DenisKolodin/yew" }
 stdweb = "0.4.12"
 web_logger = "0.1"
 log = "0.4"

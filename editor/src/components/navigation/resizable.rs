@@ -19,6 +19,7 @@ pub enum ResizableMsg {
 pub struct Resizable {
     console: ConsoleService,
     state: ResizableState,
+    props: Props,
 }
 
 impl Resizable {
@@ -83,7 +84,7 @@ impl Renderable<Resizable> for Resizable {
         html! {
             <div class="resizable",
                 onmousedown=|_|ResizableMsg::StartResize, >
-                { self.props.innerTemplate }
+                // { self.props.innerTemplate }
             </div>
         }
     }
