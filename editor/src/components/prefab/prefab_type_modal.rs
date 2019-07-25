@@ -25,7 +25,8 @@ pub struct Props {
     pub selected: Option<PrefabForms>,
     /// Callback to handle changes.
     pub options: Vec<String>,
-    pub onsignal: Option<Callback<String>>,
+    #[props(required)]
+    pub onsignal: Callback<String>,
 }
 
 impl PrefabNewModal {
@@ -46,7 +47,7 @@ impl Component for PrefabNewModal {
         PrefabNewModal {
             selected: props.selected,
             options: props.options,
-            onsignal: props.onsignal,
+            onsignal: Some(props.onsignal),
         }
     }
 
@@ -95,7 +96,7 @@ impl Component for PrefabNewModal {
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
         self.selected = props.selected;
         self.options = props.options;
-        self.onsignal = props.onsignal;
+        self.onsignal = Some(props.onsignal);
         true
     }
 }
@@ -130,7 +131,7 @@ impl Default for Props {
         Props {
             selected: None,
             options: vec![],
-            onsignal: None,
+            onsignal: Callback::from(|_| return),
         }
     }
 }

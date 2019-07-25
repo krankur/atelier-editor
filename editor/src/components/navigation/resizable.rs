@@ -19,7 +19,7 @@ pub enum ResizableMsg {
 pub struct Resizable {
     console: ConsoleService,
     state: ResizableState,
-    props: Props,
+    innerTemplate: Option<Html<Resizable>>
 }
 
 impl Resizable {
@@ -27,21 +27,27 @@ impl Resizable {
         Resizable {
             console: ConsoleService::new(),
             state: ResizableState::Static,
-            props: Props::default(),
+            innerTemplate: Some(html! {
+                <></>
+            }),
         }
     }
 }
 
 #[derive(Properties)]
 pub struct Props {
-    innerTemplate: Option<Html<Self>>,
+    pub innerTemplate: Option<Html<Resizable>>
 }
 
 impl Component for Resizable {
     type Message = ResizableMsg;
     type Properties = Props;
-    fn create(_: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Resizable::new()
+    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
+        Resizable {
+            console: ConsoleService::new(),
+            state: ResizableState::Static,
+            innerTemplate: props.innerTemplate,
+        }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -86,7 +92,7 @@ impl Renderable<Resizable> for Resizable {
         html! {
             <div class="resizable",
                 onmousedown=|_|ResizableMsg::StartResize, >
-                { self.props.innerTemplate.unwrap() }
+                { self.innerTemplate.as_ref().unwrap() }
             </div>
         }
     }
@@ -96,7 +102,7 @@ impl Default for Props {
     fn default() -> Self {
         Props {
             innerTemplate: Some(html! {
-                <div>{"testing..."}</div>
+                <></>
             })
         }
     }

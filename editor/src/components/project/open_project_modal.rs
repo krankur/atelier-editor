@@ -2,6 +2,8 @@ use std::default::Default;
 use std::string::ToString;
 use yew::prelude::*;
 
+use yew::services::ConsoleService;
+
 pub enum Msg {
     CreateClicked,
     CancelClicked,
@@ -9,7 +11,7 @@ pub enum Msg {
 
 pub struct OpenProjectModal {
     name: String,
-    on_create: Callback<Msg>,
+    on_create: Option<Callback<Msg>>,
 }
 
 #[derive(Clone, PartialEq, Properties)]
@@ -20,9 +22,11 @@ pub struct Props {
 
 impl OpenProjectModal {
     pub fn new(name: String) -> Self {
+        let mut console = ConsoleService::new();
+        console.info("open project modal create modal new!");
         OpenProjectModal {
             name,
-            on_create: Callback::from(|_| return),
+            on_create: Some(Callback::from(|_| return)),
         }
     }
 }
@@ -31,9 +35,15 @@ impl Component for OpenProjectModal {
     type Message = Msg;
     type Properties = Props;
     fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
+        let mut console = ConsoleService::new();
+        if props.on_create.is_some() {
+            console.info("open project modal create!");
+        } else {
+            console.info("open project modal create none!");
+        }
         OpenProjectModal {
             name: props.name,
-            on_create: props.on_create.unwrap(),
+            on_create: props.on_create,
         }
     }
 
@@ -42,8 +52,14 @@ impl Component for OpenProjectModal {
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
+        let mut console = ConsoleService::new();
+        if props.on_create.is_some() {
+            console.info("open project modal create!");
+        } else {
+            console.info("open project modal create none!");
+        }
         self.name = props.name;
-        self.on_create = props.on_create.unwrap();
+        self.on_create = props.on_create;
         true
     }
 }
@@ -71,10 +87,12 @@ impl Renderable<OpenProjectModal> for OpenProjectModal {
 
 impl Default for Props {
     fn default() -> Self {
+        let mut console = ConsoleService::new();
+        console.info("open project modal props default!");
         Props {
             name: "New Project".to_string(),
-            // on_create: Callback::from(|_| return),
-            on_create: None,
+            on_create: Some(Callback::from(|_| return)),
+            // on_create: None,
         }
     }
 }

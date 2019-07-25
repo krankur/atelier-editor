@@ -234,6 +234,9 @@ impl Component for Model {
 impl Renderable<Model> for Model {
     /// This is the main HTML section for the editor. All other parts of the Editor are contained in this div.
     fn view(&self) -> Html<Self> {
+        let innerTemplate: Option<Html<Resizable>> = Some(html! {
+            <div>{"I am inner template"}</div>
+        });
         html! {
             <div class="editor-wrapper",>
                 <EditorToolbar: />
@@ -248,7 +251,7 @@ impl Renderable<Model> for Model {
                         <NavBar: ws_connected={self.state.ws_connected}, />
                     </header>
                 <section class="main",>
-                    // <Resizable: />
+                    <Resizable innerTemplate=innerTemplate />
                     <div>{ "nested" }</div>
                     {self.choose_primary_window()}
                 </section>

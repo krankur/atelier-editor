@@ -15,7 +15,7 @@ pub struct TextInputModal {
     placeholder: String,
     button_text: String,
     id: String,
-    on_import: Callback<String>,
+    on_import: Option<Callback<String>>,
     warning_hidden: bool,
 }
 
@@ -39,8 +39,8 @@ impl Default for Props {
             placeholder: "...".to_string(),
             button_text: "Save".to_string(),
             id: "#generic-modal".to_string(),
-            // on_import: Callback::from(|_| return),
-            on_import: None,
+            on_import: Some(Callback::from(|_| return)),
+            // on_import: None,
             warning_hidden: true,
             onsignal: None,
         }
@@ -55,7 +55,7 @@ impl TextInputModal {
             placeholder: String::new(),
             button_text: String::new(),
             id: String::new(),
-            on_import: Callback::from(|_| return),
+            on_import: Some(Callback::from(|_| return)),
             warning_hidden: true,
         }
     }
@@ -69,7 +69,7 @@ impl Default for TextInputModal {
             placeholder: "...".to_string(),
             button_text: "Save".to_string(),
             id: "#generic-modal".to_string(),
-            on_import: Callback::from(|_| return),
+            on_import: Some(Callback::from(|_| return)),
             warning_hidden: true,
         }
     }
@@ -84,7 +84,7 @@ impl Component for TextInputModal {
             content: props.content,
             placeholder: props.placeholder,
             button_text: props.button_text,
-            on_import: props.on_import.unwrap(),
+            on_import: props.on_import,
             id: props.id,
             warning_hidden: true,
         }
@@ -104,7 +104,7 @@ impl Component for TextInputModal {
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.on_import = props.on_import.unwrap();
+        self.on_import = props.on_import;
         self.content = props.content;
         self.title = props.title;
         self.placeholder = props.placeholder;

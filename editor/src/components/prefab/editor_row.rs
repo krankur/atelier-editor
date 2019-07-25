@@ -77,8 +77,8 @@ impl Default for Props {
         Props {
             name: "Field Name".to_string(),
             value: "Field Value".to_string(),
-            // on_add: Callback::from(|_| return),
-            on_add: None,
+            on_add: Some(Callback::from(|_| return)),
+            // on_add: None,
         }
     }
 }

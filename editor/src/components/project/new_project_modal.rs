@@ -19,7 +19,8 @@ pub struct NewProjectModal {
 pub struct Props {
     pub name: String,
     pub project_exists: bool,
-    pub onsignal: Option<Callback<String>>,
+    #[props(required)]
+    pub onsignal: Callback<String>,
 }
 
 impl Default for Props {
@@ -27,7 +28,7 @@ impl Default for Props {
         Props {
             name: "Test Project".to_string(),
             project_exists: false,
-            onsignal: None,
+            onsignal: Callback::from(|_| return),
         }
     }
 }
@@ -40,7 +41,7 @@ impl Component for NewProjectModal {
         NewProjectModal {
             name: props.name,
             project_exists: false,
-            onsignal: props.onsignal,
+            onsignal: Some(props.onsignal),
         }
     }
 

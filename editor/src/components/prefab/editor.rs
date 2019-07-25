@@ -41,11 +41,11 @@ pub struct PrefabEditorProps {
 impl Default for PrefabEditorProps {
     fn default() -> Self {
         PrefabEditorProps {
-            // on_prefab_create: Callback::from(|_| return),
-            on_prefab_create: None,
+            on_prefab_create: Some(Callback::from(|_| return)),
+            // on_prefab_create: None,
             rows: vec![],
-            // add_row_callback: Callback::from(|_| return),
-            add_row_callback: None,
+            add_row_callback: Some(Callback::from(|_| return)),
+            // add_row_callback: None,
             selected_prefab: None,
         }
     }
