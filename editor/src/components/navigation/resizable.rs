@@ -27,10 +27,12 @@ impl Resizable {
         Resizable {
             console: ConsoleService::new(),
             state: ResizableState::Static,
+            props: Props::default(),
         }
     }
 }
 
+#[derive(Clone, PartialEq, Properties)]
 pub struct Props {
     innerTemplate: Option<Html<Self>>,
 }
@@ -84,7 +86,7 @@ impl Renderable<Resizable> for Resizable {
         html! {
             <div class="resizable",
                 onmousedown=|_|ResizableMsg::StartResize, >
-                // { self.props.innerTemplate }
+                { self.props.innerTemplate.unwrap() }
             </div>
         }
     }
