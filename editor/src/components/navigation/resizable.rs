@@ -1,5 +1,6 @@
 use std::rc::Rc;
 use std::cell::RefCell;
+use std::ops::Deref;
 
 use std::default::Default;
 use stdweb::web::{document, EventListenerHandle, IEventTarget};
@@ -19,7 +20,17 @@ pub enum ResizableMsg {
 pub struct Resizable {
     console: ConsoleService,
     state: ResizableState,
-    innerTemplate: Option<Html<Resizable>>
+    props: Props,
+}
+
+impl Default for Resizable {
+    fn default() -> Self {
+        Resizable {
+            console: ConsoleService::new(),
+            state: ResizableState::Static,
+            props: Props::default(),
+        }
+    }
 }
 
 impl Resizable {
@@ -27,16 +38,15 @@ impl Resizable {
         Resizable {
             console: ConsoleService::new(),
             state: ResizableState::Static,
-            innerTemplate: Some(html! {
-                <></>
-            }),
+            props: Props::default(),
         }
     }
 }
 
 #[derive(Properties)]
 pub struct Props {
-    pub innerTemplate: Option<Html<Resizable>>
+    #[props(required)]
+    pub inner_template: Box<dyn Renderable<Resizable>>,
 }
 
 impl Component for Resizable {
@@ -46,7 +56,7 @@ impl Component for Resizable {
         Resizable {
             console: ConsoleService::new(),
             state: ResizableState::Static,
-            innerTemplate: props.innerTemplate,
+            props: props,
         }
     }
 
@@ -92,7 +102,7 @@ impl Renderable<Resizable> for Resizable {
         html! {
             <div class="resizable",
                 onmousedown=|_|ResizableMsg::StartResize, >
-                { self.innerTemplate.as_ref().unwrap() }
+                { self.props.inner_template.deref() }
             </div>
         }
     }
@@ -101,9 +111,7 @@ impl Renderable<Resizable> for Resizable {
 impl Default for Props {
     fn default() -> Self {
         Props {
-            innerTemplate: Some(html! {
-                <></>
-            })
+            inner_template: Box::new(Resizable::default()),
         }
     }
 }
